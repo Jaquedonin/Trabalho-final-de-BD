@@ -8,7 +8,7 @@ var router = express.Router();
 
 
 
- var data = ['Bozo never', 'Brasília — O PT entrou com um pedido para que a Polícia Federal investigue a suspeita de práticas ilícitas no uso de redes sociais por parte da campanha do candidato do PSL à Presidência, Jair Bolsonaro, incluindo denúncia de que empresas estariam pagando pelo envio de mensagens em defesa do candidato.', 1];  
+ var userData = ['Aqui oh', 'aqui mesmo', 1, 1];  
 database.connection.connect(function(err)
 {
     if(err) {
@@ -18,7 +18,7 @@ database.connection.connect(function(err)
     else
     {
         console.log(" Connected!");
-        database.connection.query(query.insertPostText(data), function(err, result, fields) 
+        database.connection.query(query.insertSolicitGrupo(5, 1 ,0), function(err, result, fields) 
         {
         
             if (err) 

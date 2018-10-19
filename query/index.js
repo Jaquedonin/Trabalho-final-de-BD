@@ -2,7 +2,7 @@ module.exports = {
 
 	//Done
 	insertUser : function(data){
-		return "INSERT INTO usuario (nome, cidade, email, senha, visibilidade) VALUES('"+data[0]+"', '"+data[1]+"', '"+data[2]+"', '"+data[3]+"', '"+data[4]+"')";
+		return "INSERT INTO usuario (nome, cidade, email, senha, visibilidade) VALUES('"+data[0]+"', '"+data[1]+"', '"+data[2]+"', '"+data[3]+"', "+data[4]+")";
 	},
 	//Users and groups in the plataform
 	//done
@@ -28,75 +28,76 @@ module.exports = {
 		return "SELECT * FROM amizade WHERE (id_usuario1 = "+id_user+") OR (id_usuario2 = "+id_user+") ";
 	},
 	//done
-	inserOne : function (table, campo, data){
-		return "INSERT  INTO '"+table+"' '"+campo+"' VALUES "+data;
-		
-	},
-	
 	insertPostText : function(data){
 		return "INSERT INTO postagem (legenda, texto, id_usuario) VALUES ('"+data[0]+"', '"+data[1]+"', "+data[2]+")";
 	},
-
-	insertPostText : function(image, data){
-		return "INSERT INTO postagem (legenda, id_usuario) VALUES ('"+data[0]+"', '"+data[1]+"', '"+data[2]+"')";
-	},
-
+	//done
 	insertFeed : function (id_user, id_post){
 		return "INSERT INTO feed (id_usuario, id_postagem) VALUES ("+id_user+", "+id_post+")";
- 
 	},
-
-	findPost : function (id)
+	//done
+	findPost : function (id_user)
 	{
-		return "SELECT postagem.* FROM feed INNER JOIN postagem ON postagem.id = feed.postagem_id WHERE feed.usuario_id = usuario."+id;
+		return "SELECT id_postagem FROM feed WHERE feed.id_usuario = "+id_user;	
 
 	},
-	updateOne : function(table, id, campo, dado){
-		return "UPDATE "+ table +" SET "+table+" = '"+dado+"' WHERE id = " +id
+	//done
+	updateOne : function(id, data){
+		return "UPDATE usuario SET email = '"+data+"' WHERE usuario.id = "+id;
 	},
-	findUser : function(table, name){
-		return "SELECT usuario WHERE usuario.nome = "+name
+	//done
+	findUser : function(){
+		return "SELECT * FROM usuario WHERE nome = ?";
 	},
 	
-	deleteOne : function(table, id){
-		return "DELETE FROM "+ table +" WHERE id = "+id;
+	deleteOne : function( id_user){
+		return "DELETE FROM usuario WHERE id ="+id_user;
 	}, 
-
-	insertFeedGroup : function(table, id){
-		return "INSERT INTO feed_grupo (legenda, texto, id_grupo, id_usuario) VALUES ('"+data[0]+"', '"+data[1]+"', "+data[2]+", "+data[3]+")";
+	//done
+	insertFeedGroup : function (data){
+		return "INSERT INTO feed_grupo (descricao, texto, id_grupo, id_usuario) VALUES ('"+data[0]+"', '"+data[1]+"', "+data[2]+", "+data[3]+")";
 	}, 
-	
-	acceptFriend : function(table, value, id_user1, id_user2){
-		return "UPDATE amizade SET status = "+value+" WHERE id_usuario2 = "+id_user2+" AND id_usuario1 = "+id_user1;
+	//done
+	acceptFriend : function( value, id_user1, id_user2){
+		return "UPDATE amizade SET status = "+value+" WHERE (id_usuario2 = "+id_user2+" AND id_usuario1 = "+id_user1+")";
 	},
-
+	//done
 	deleteSolicit : function(id_user1, id_user2){
-		return "DELETE FROM amizade WHERE id_usuario2 = "+id_user2+" AND id_usuario1 = "+id_user1;
+		return "DELETE FROM amizade WHERE (id_usuario2 = "+id_user2+" AND id_usuario1 = "+id_user1+")";
 	}, 
-
+	//done
 	blockFriend : function(value, id_user1, id_user2){
 		return "UPDATE amizade SET bloqueado = "+value+" WHERE (id_usuario2 = "+id_user2+" AND id_usuario1 = "+id_user1+") OR (id_usuario1 = "+id_user2+" AND id_usuario2 = "+id_user1+")";
 	}, 
-
+	//done
 	undoFriend : function(id_user1, id_user2){
-		return "DELETE FROM "+ table +" WHERE (id_usuario2 = "+id_user2+" AND id_usuario1 = "+id_user1+") OR (id_usuario1 = "+id_user2+" AND id_usuario2 = "+id_user1+")";
+		return "DELETE FROM amizade WHERE (id_usuario2 = "+id_user2+" AND id_usuario1 = "+id_user1+") OR (id_usuario1 = "+id_user2+" AND id_usuario2 = "+id_user1+")";
 	},
-
+	//done
 	acceptMember :  function(value, id_user, id_group){
 		return "UPDATE membro_grupo SET EhMembro = "+value+" WHERE (id_usuario = "+id_user+" AND id_grupo = "+id_group+")";
 	}, 
-
+	//done
 	rejectMember : function( id_user, id_group){
 		return "DELETE FROM membro_grupo WHERE id_usuario = "+id_user+" AND id_grupo = "+id_group;
 	},
-
-	blockMember : function(value, id_user, id_user2, id_group){
+	//done
+	blockMember : function(value, id_user, id_group){
 		return "UPDATE membro_grupo SET bloqueado = "+value+" WHERE (id_usuario = "+id_user+" AND id_grupo = "+id_group+")";
 	}, 
-
-	undoMember : function(id_user1, id_user2){
-		return "DELETE FROM "+ table +" WHERE (id_usuario2 = "+id_user2+" AND id_usuario1 = "+id_user1+") OR (id_usuario1 = "+id_user2+" AND id_usuario2 = "+id_user1+")";
+	//done
+	undoMember : function(id_user, id_group){
+		return "DELETE FROM membro_grupo WHERE (id_usuario = "+id_user+" AND id_grupo = "+id_group+")";
 	},
+	//done
+	insertSolicitFriend :  function (id_user1, id_user2, sts){
+		return "INSERT INTO amizade (id_usuario1, id_usuario2, status) VALUES ("+id_user1+", "+id_user2+", "+sts+")";
+	}, 
+	//done
+	insertSolicitGrupo :  function (id_user, id_group, EhMember){
+		return "INSERT INTO membro_grupo (id_usuario, id_grupo, EhMembro) VALUES ("+id_user+", "+id_group+", "+EhMember+")";
+	}, 
+
 
 
 
