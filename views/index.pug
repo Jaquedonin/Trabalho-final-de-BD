@@ -1,0 +1,36 @@
+extends layout.pug
+block content
+    body#page-top
+    header#mapa-header
+        nav.navbar.navbar-expand-lg.navbar-dark.navbar-fixed-top
+            .container
+                a.navbar-brand.col-4(href='#page-top') MAPA DE  CONTROLE SOCIAL
+                #logo.navbar-brand.col-4 
+                    img(src="images/logo-tce.png")
+                button.navbar-toggler.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar', aria-label='Toggle navigation')
+                    span.sr-only Toggle navigation
+                    span.navbar-toggler-icon
+                #navbar.col-4.collapse.navbar-collapse
+                    ul.navbar-nav.ml-auto
+                        li.nav-item
+                            a.nav-link Como participar
+                        li.nav-item#login
+                            if user
+                                a.nav-link(href="/dashboard") 
+                                    span Gerenciador
+                            else
+                                a.nav-link(href='/auth') Login
+                        li.nav-item
+                            a.nav-link Sobre
+    section#mapa-wrapper
+      .container
+        .navbar#mapa-nav.row
+            input#select-cidade(type='text' name='codigo' placeholder="Pesquisar municípios").col-4.form-control.form-control-sm
+            #zoom.col-1
+                div 
+                    #zoom-in(onclick="zoomIn()") +
+                    #zoom-out(onclick="zoomOut()") -
+        include mapa.pug
+        div#galery
+    include modal-videos.pug
+    script(type='text/javascript', src='javascripts/mapa.js')

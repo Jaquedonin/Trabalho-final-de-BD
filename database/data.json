@@ -1,0 +1,39 @@
+{ 
+    "title": "Lavid",
+    "escola": {
+        "nome": "E.E.P Euniz Argemiro",
+        "cidade": "João Pessoa"
+    },
+    "user": false,
+    "videos": 
+        [
+            {
+                "user": "photo.php?fbid=2008550482543095",
+                "id": null,
+                "cidade": "2507507",
+                "escola": "teste"
+            },
+            {
+                "user": "DellBrasil",
+                "id": "208059176644163",
+                "cidade": "2507507",
+                "escola": "EEEFMLAVID"
+            },
+            {
+                "user": "",
+                "id": null,
+                "cidade": "2507507",
+                "escola": "adasdasd"
+            },
+            {
+                "user": "DellBrasil",
+                "id": "208059176644163",
+                "cidade": "2507507",
+                "escola": "erererere"
+            }
+        ],
+    "list":{
+        "title": "Meus videos"
+    }
+    
+}
