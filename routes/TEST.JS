@@ -8,7 +8,8 @@ var router = express.Router();
 
 
 
- var userData = ['Aqui oh', 'aqui mesmo', 1, 1];  
+
+ 
 database.connection.connect(function(err)
 {
     if(err) {
@@ -18,24 +19,16 @@ database.connection.connect(function(err)
     else
     {
         console.log(" Connected!");
-        database.connection.query(query.insertSolicitGrupo(5, 1 ,0), function(err, result, fields) 
-        {
         
-            if (err) 
-            {
-                console.log("Not Connected! 2");
-     
-            } 
+        database.connection.query(query.findMyFriends(1), function(err, result) 
+        {           
+           if(!err) {
+                        console.log("Deu certo");
+                        console.log(result);
 
-            else 
-            {             
-                 console.log(" Connected! 2");
-                 console.log(result);
-                 //console.log("Number of records inserted: " + result.affectedRows);
-            }
-            
-            database.connection.end();
-
+                    }
+   
+                    
         });
     }
 });

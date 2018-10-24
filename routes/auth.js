@@ -1,10 +1,14 @@
 var express = require('express');
 var database = require('../database/database');
 var auth = express.Router();
+var query = require('../query');
 var cors = require('cors')
 var jwt = require('jsonwebtoken');
+
 var token;
+var user;
 auth.use(cors());
+
 process.env.SECRET_KEY = "devesh";
 
 
@@ -12,7 +16,7 @@ process.env.SECRET_KEY = "devesh";
 
 auth.post('/register', function(req, res)
  {    
-    var userData = [req.body.nome, req.body.foto, req.body.cidade, req.body.email, req.body.senha, parseInt(req.body.visibilidade)];
+    var userData = [req.body.nome, req.body.cidade, req.body.email, req.body.senha];
     database.connection.connect(function(err)
     {
         if(err) 
@@ -33,7 +37,8 @@ auth.post('/register', function(req, res)
 
                 else 
                 {             
-                    res.status(201).json({ error: 0, data: "User registered successfully!"});
+                    //res.status(201).json({ error: 0, data: "User registered successfully!"});
+                    return res.redirect('/auth');
                 }
                 
                 database.connection.end();
@@ -54,10 +59,7 @@ auth.post('/login', function(req, res) {
     var email = req.body.email;
     var senha = req.body.senha;
  
-    database.connection.query(
-        
-        'SELECT * FROM professores WHERE email = ? AND senha = ?', 
-        [email, senha], function(err, rows, fields) {
+    database.connection.query(query.findLogin(email, senha), function(err, rows, fields) {
         
         if (err) {
             res.status(400).json({
@@ -65,48 +67,40 @@ auth.post('/login', function(req, res) {
                 data: "Error occured!",
                 err: err
             });
-        } else {
+        } 
+
+        else 
+        {
             
-            if (rows.length > 0) {
-                
+            if (rows.length > 0) 
+            {
+                console.log("Dentro de login");
                 if (rows[0].senha == senha) 
                 {
-                    var professorId = rows[0].id;
+                  console.log("testando senha");  
+                   var userId = rows[0].id;
                     var payload = JSON.parse(JSON.stringify(rows[0]));
                     var token = jwt.sign(payload, process.env.SECRET_KEY, {
                         expiresIn: 1440
                     });
-                    
+                    req.session.user = true;
                     req.session.token = token;
-                    req.session.professorId = professorId;
-                    
-                    var getProfEscolaId = new Promise(function(resolve, reject) {      
-                        database.connection.query(        
-                                'SELECT * FROM professores_escolas WHERE professor_id = ?', 
-                                [professorId], function(err, rowsProf, fields) {
-                                    resolve(rowsProf[0] ? rowsProf[0].id : false);
-                        })
-                    })
-                    
-                    getProfEscolaId.then(function(professorEscolaId){
-                        req.session.professorEscolaId = professorEscolaId
-                        
-                        req.session.user = {
-                            "nome": req.body['fb-name'],
-                            "foto": req.body['fb-photo']
-                        };
-                            
-                        return res.redirect('/bem-vindo');
-                    });
+                    req.session.userId = userId;     
+                    return res.redirect('/dashboard');
+                } 
 
-                } else {
+                else 
+                {
+                    console.log("senha errada"); 
                     res.status(204).json({
                         error: 1,
                         data: 'Email and Password does not match'
                     });
                 }
 
-            } else {;
+            } else 
+            {
+                console.log("senha e email errada"); 
                 res.status(204).json({
                     error: 1,
                     data: 'Email does not exists!'

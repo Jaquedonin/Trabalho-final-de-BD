@@ -5,38 +5,23 @@ var router = express.Router();
 var functions = require('../include/functions')
 
 //inserir videos
-router.post('/videos', function(req, res, next) {
-	//variables to test url Facebook and Youtube 
+router.get('/postagens', function(req, res, next) {
+	//variables to test url Facebook and Youtube
+	if(req.session.userId === undefined){
+		console.log("redirect login")
+		return res.redirect('/auth');
+	} 
 
-	var regexYouTube = /^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
-	var regexFacebook = /(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/;
+	database.connection.query(query.findMyP(req.session.userId), function(err, result) 
+    {     
+       if(!err) 
+       {
+            console.log("Encontrou postagens");
+            data.postagens = result;
+            res.render('dashboard', data);
 
-	if(regexYouTube.test(req.body.url))
-	{
-		console.log(functions)
-		var url_embed = 'https://youtube.com/embed/'+functions.encodeYouTubeUrl(req.body.url);
-		
-	}
-	else if(regexFacebook.test(req.body.url))
-	{
-		var url_embed = functions.encodeFacebookUrl(req.body.url);	
-	}
-	else
-	{
-		var url_embed = "Erro em url_embed";
-	}
-
-	var data = [req.session.professorEscolaId, url_embed , req.body.codigo, parseInt(req.body.categoria_id), req.body.titulo];
-	console.log(data);
-	database.connection.query(query.insertOne("videos", data ), function (err, result) {
-		if(err){
-			res.setHeader('Content-Type', 'application/json');
-			return res.status(400).send(err);
-		}
-		else{
-			return res.redirect('/dashboard');
-		}
-	});
+        }                      
+    });
 });
 
 
@@ -57,14 +42,14 @@ router.post('/delete/videos', function(req, res, next) {
 	}
 });
 
-router.get('/videos', function(req, res, next) {	
-	if(req.session.professorId === undefined){
+router.get('/amigos', function(req, res, next) {	
+	if(req.session.userId === undefined){
 		console.log("redirect login")
 		return res.redirect('/auth');
 	}
 	else{
-		console.log(req.session.professorId)
-		database.connection.query(query.findAllVideos("professores_escolas", req.session.professorId), function (err, result) {
+		console.log(req.session.userId)
+		database.connection.query(query.findMyFriends(req.session.userId), function (err, result) {
 			if(err){
 				res.setHeader('Content-Type', 'application/json');
 				return res.status(400).send(err);
@@ -72,7 +57,7 @@ router.get('/videos', function(req, res, next) {
 			else{
 				res.setHeader('Content-Type', 'application/json');
 				res.json(result);
-				res.end('video')
+				res.end('amigos');
 
 			}
 		}); 	

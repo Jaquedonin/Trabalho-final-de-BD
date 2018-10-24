@@ -98,6 +98,14 @@ p+span, a+span{
 .list-videos .col-3{
     height: auto;
     margin: 10px 0 0 0;
+
+}
+
+.list-videos2 .col-3{
+    height: auto;
+    margin: 10px 0 0 0;
+    flex-direction: column;
+
 }
 
 #list-menu{
@@ -115,6 +123,19 @@ p+span, a+span{
     border-radius: 10px;
     background-size: cover;
     background-position: center;
+    flex-direction: column;
+}
+
+.video div{
+    background: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: 1;
+    border-radius: 10px;
+    flex-direction: column;
 }
 
 .video div{
@@ -127,6 +148,7 @@ p+span, a+span{
     z-index: 1;
     border-radius: 10px;
 }
+
 
 .video i{
     position:absolute;
@@ -155,7 +177,7 @@ p+span, a+span{
 
 #send h4, #send p, #list h4{
     color: #fff;
-    text-align: center;
+    text-align: left;
     margin: 5px 0;
 }
 
@@ -249,7 +271,6 @@ footer p{ margin-bottom: 0;}
     padding: 0 10px;
     transition: 1s;
     background: #fff;
-    top: calc(-1.8125rem);
     border-radius: .2rem;
     border: 1px solid #ced4da;
     z-index: 1;
@@ -280,10 +301,12 @@ footer p{ margin-bottom: 0;}
     padding: 20px 15px 0 15px;
     flex: 1;
     height: 0;
+    flex-direction: column;
 }
 
 #send-list > .row{
     height: 100%;
+    flex-direction: column;
 }
 
 .container-height{
@@ -292,4 +315,41 @@ footer p{ margin-bottom: 0;}
 
 #send, #list{
     margin-bottom: 75px;
+}
+
+.card-1{
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 200px;
+    height: 100px;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+.card-body-2{
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 200px;
+    height: 100px;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+
+.row2 {
+    display: -ms-flexbox;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
 }

@@ -2,13 +2,17 @@ module.exports = {
 
 	//Done
 	insertUser : function(data){
-		return "INSERT INTO usuario (nome, cidade, email, senha, visibilidade) VALUES('"+data[0]+"', '"+data[1]+"', '"+data[2]+"', '"+data[3]+"', "+data[4]+")";
+		return "INSERT INTO usuario (nome, cidade, email, senha) VALUES('"+data[0]+"', '"+data[1]+"', '"+data[2]+"', '"+data[3]+"')";
 	},
 	//Users and groups in the plataform
 	//done
 	findAll : function(table){
 		return "SELECT * FROM "+table;
 	},
+	findEvery : function(table, id){
+		return "SELECT * FROM "+table+" WHERE id = "+id;
+	},
+
 	//find anything with attribute ID
 	//findUserSolicitations
 	//findGroupsSolicitations
@@ -20,12 +24,12 @@ module.exports = {
 	//findAdminGroups
 	//getUser
 	//done
-	findOne : function(table, collumn, id){
-		return "SELECT "+collumn+" FROM "+table+" WHERE id = "+id;
+	findOne : function( id){
+		return "SELECT id_postagem FROM feed WHERE id_usuario = "+id;
 	},
 	//done
 	findMyFriends : function(id_user){
-		return "SELECT * FROM amizade WHERE (id_usuario1 = "+id_user+") OR (id_usuario2 = "+id_user+") ";
+		return "SELECT DISTINCT usuario.nome, usuario.id FROM amizade INNER JOIN usuario  ON ((usuario.id = amizade.id_usuario1 OR usuario.id = amizade.id_usuario2) AND usuario.id <> "+id_user+") WHERE (id_usuario1 = "+id_user+" OR id_usuario2 = "+id_user+");";
 	},
 	//done
 	insertPostText : function(data){
@@ -98,7 +102,23 @@ module.exports = {
 		return "INSERT INTO membro_grupo (id_usuario, id_grupo, EhMembro) VALUES ("+id_user+", "+id_group+", "+EhMember+")";
 	}, 
 
+	findLogin :  function (email, senha){
+		return "SELECT * FROM usuario WHERE email = '"+email+"' AND senha = "+senha;
+	}, 
 
+	findMyP :  function (id){
+		return "SELECT  postagem.* FROM feed INNER JOIN postagem ON postagem.id = feed.id_postagem INNER JOIN usuario ON usuario.id = feed.id_usuario WHERE feed.id_usuario = "+id;
+		
+	},
+
+	findMyGroups :  function (id, membro){
+		return "SELECT  grupo.* FROM membro_grupo INNER JOIN grupo ON grupo.id = membro_grupo.id_grupo INNER JOIN usuario ON usuario.id = membro_grupo.id_usuario WHERE (membro_grupo.id_usuario = "+id+" and membro_grupo.EhMembro = "+membro+")";
+		
+	},
+
+	//findMyG :  function (id){
+	//	return "SELECT  grupo.* FROM membro_grupo INNER JOIN grupo ON grupo.id = membro_grupo.id_grupo INNER JOIN usuario ON usuario.id = memebro_grupo.id_usuario WHERE (membro_grupo.id_usuario = 1 AND membro_grupo.EhMembro = 1)";		
+	//}
 
 
 

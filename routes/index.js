@@ -1,16 +1,22 @@
 
 var express = require('express');
 var router = express.Router();
+var favicon = require('serve-favicon')
 var database = require('../database/database');
 var query = require('../query');
 var fs = require('fs');
+var path = require('path')
 var data = JSON.parse(fs.readFileSync('./database/data.json', 'utf8'));
+
+
+var app = express()
+app.use(favicon(path.join('./public/images/mario.ico')))
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
     
     data.user = req.session.user;
-    res.render('index', data);
+    res.render('auth', data);
    
 });
 
@@ -18,8 +24,8 @@ router.get('/bem-vindo', function(req, res, next) {
     
     if(!req.session.user)
     {
-        //data.user = false;
-        data.professores = false;
+        data.user = false;
+        //data.professores = false;
         return res.redirect("/auth");
     } 
     
@@ -165,47 +171,86 @@ router.post('/register', function(req, res, next){
 });
 
 router.get('/dashboard', function(req, res, next) {
-
+    console.log("Dentro de dashboard"); 
     if(!req.session.token)
     {
         return res.redirect("/auth");
     }
-
+    data.user = req.session.user;
     data.user = true;
 
-    database.connection.query(query.findAllVideos(req.session.professorId), function (err, result) 
+    //Pegando dados do usuário logado
+    database.connection.query(query.findEvery( 'usuario', req.session.userId), function (err, result) 
     {
         if(!err)
         {
+            data.usuario = result;
 
-            data.videos = result;
-            database.connection.query(query.findAll('cidades'), function (err, result) {
-                
-                if(!err)
-                {
-                    data.cidades = result;
-                    res.render('dashboard', data);
+
+            //res.render('dashboard', data);
+             //Pegando postagens
+            database.connection.query(query.findMyP(req.session.userId), function(err, result) 
+            {     
+               if(!err) 
+               {
+                    console.log("Encontrou postagens");
+                    data.postagens = result;
+                    //data.postagens = result;
+                    //res.render('dashboard', data);
+                    database.connection.query(query.findMyGroups(req.session.userId, 1), function(err, result) 
+                    {     
+                       if(!err) 
+                       {
+                            console.log("Encontrou grupos");
+                            data.grupos = result;
+                            //data.postagens = result;
+                            //es.render('dashboard', data);
+                            database.connection.query(query.findMyFriends(req.session.userId), function(err, result) 
+                            {     
+                               if(!err) 
+                               {
+                                    console.log("Encontrou amigos");
+                                    data.amizades = result;
+                                    //data.postagens = result;
+                                    res.render('dashboard', data);
+                                }                      
+                            });
+                        }                      
+                    });
+                }                      
+            });          
+        }
+
+        else
+        {
+            console.log(err);
+        }
+        var postData;
+        database.connection.query(query.findOne(req.session.userId), function(err, result) 
+        {
+            console.log(result);
+            for (var i = 0;  i < result.length; i++) 
+               {    
+                    var id_post = result[i].id_postagem;
+                     database.connection.query(query.findEvery('postagem',id_post), function(err, result, fields) 
+                        {
+                    
+                            if (err) 
+                                {
+                                    console.log("Not Connected! 2");
+                                } 
+
+                            else 
+                            {             
+                                 console.log(" Connected! 2");
+                                 console.log(result);
+                                 postData +=result;
+                            }
+                        });
                 }
-            }); 
-        }
-
-        else
-        {
-            console.log(err);
-        }
+        });   
     });
-    database.connection.query(query.findAll('categorias'), function (err, result) 
-    {
-        if(!err)
-        {
-            data.categorias = result;
-        }
-
-        else
-        {
-            console.log(err);
-        }
-    });
+    
 
 });
 

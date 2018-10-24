@@ -1,37 +1,14 @@
-h4="Enviar vídeos"
-.form-group#yt
-  .input-group.mb-3.input-group-sm
-    input#yt-link.form-control.form-control-sm.send-link(type="text" placeholder="Inserir link do vídeo")
-    .input-group-append
-      span.input-group-text 
-        i#yt-btn.fas.fa-plus
-    #yt-preview.col-12
-        .row
-            .col-4
-                img#yt-thumb
-            .col-8
-                form(method='POST' action='/videos')
-                    input#yt-name.form-control.form-control-sm(type="text" name="nome-aluno")
-                    input#yt-title.form-control.form-control-sm(type="text" name="titulo")
-                    input#yt-desc.form-control.form-control-sm(type="text" name="descricao")
-                    input#yt-url(type="hidden", name='url')
-                    input#yt.form-control.form-control-sm(type="text" name="escola" placeholder="Nome Escola")
-                    select(type='text' name='codigo')#cidade.form-control.form-control.sm
-                        if cidades
-                            each cidade in cidades 
-                                option(value=cidade.codigo) #{cidade.nome}
-                    select(type='text' name='categoria_id')#categoria.form-control.form-control.sm
-                        if categorias
-                            each categoria in categorias 
-                                option(value=categoria.id) #{categoria.tipo}
-                    button#yt-add.form-control.form-control-sm Adicionar
-                    button#yt-cancel.form-control.form-control-sm Cancelar
+h4="Amigos"
 
+.teste1
+    div.list-videos2.row2
+        if amizades
+            each amizade in amizades
+                .col-3.m-2.p-0
+                    .container
+                        h2 
+                        .card-1
+                            .card-body-2 #{amizade.nome}
+    
     div.row
         .col-12.mb-2
-
-p#fb-login.fb-login.text-center
-    fb:login-button#fb-login-btn(scope='public_profile,email,user_photos,user_videos,user_link,user_posts,user_likes', onlogin='setFbUser()')
-p="Ou pelo facebook"
-div#fb-user-videos.row
-

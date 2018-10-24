@@ -4,7 +4,7 @@ block content
         header
             nav#header.navbar.navbar-inverse
                 .container
-                        a.navbar-brand Painel de Gerenciamento    
+                        a.navbar-brand Perfil    
                         #user.col-6
                                 .row
                                     .col
@@ -14,9 +14,8 @@ block content
                                         .row
                                             .container.text-right
                                                 a(href="auth/logout") Sair
-                                    .col#fb-photo
-                                        img(src=user.foto)                   
-        div#send-list
+                                                       
+        div#send-list-groups
             .row.d-flex.flex-row.justify-content-around
                 #send.col-md-4.d-flex.flex-column.align-content-stretch
                     block send
